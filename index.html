@@ -843,6 +843,20 @@
         'At the far end of the {2}, the {0} found the {1} waiting.',
         'As the night deepened, the {0} guarded the {1} at the {2}.'
       ];
+      const partialContinuations = {
+        1: [
+          'Then the {0} disappeared into the night.',
+          'Soon after, the {0} returned with a secret.',
+          'By sunrise, the {0} had changed everything.',
+          'Without warning, the {0} began to run.'
+        ],
+        2: [
+          'Then the {0} carried the {1} into the night.',
+          'Soon after, the {0} hid the {1} from everyone.',
+          'Before sunrise, the {0} traded the {1} for a secret.',
+          'At last, the {0} understood what the {1} was for.'
+        ]
+      };
       const countEl = document.getElementById('count');
       const grid = document.getElementById('dice-grid');
       const storyText = document.getElementById('story-text');
@@ -906,7 +920,11 @@
         const sentences = [];
         for (let start = 0; start < rolled.length; start += 3) {
           const trio = rolled.slice(start, start + 3);
-          const templatePool = start === 0 ? storyStarters : storyContinuations;
+          const templatePool = start === 0
+            ? storyStarters
+            : trio.length === 3
+              ? storyContinuations
+              : partialContinuations[trio.length];
           let sentence = templatePool[Math.floor(Math.random() * templatePool.length)];
           sentence = sentence.replace(/\{(\d)\}/g, (_, position) => {
             const word = trio[position]?.word || 'something unknown';
