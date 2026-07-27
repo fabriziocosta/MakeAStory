@@ -821,28 +821,27 @@
       };
       const categoryKeys = { character: 'characters', object: 'objects', place: 'places' };
 
-      const storyOpeners = [
-        'At midnight, the {0} found a {1} hidden beneath the {2}.',
-        'Nobody believed the {0} until it returned with a {1} and a warning about the {2}.',
-        'The {0} was the only thing that could lead them past the {1}, but first they had to trust the {2}.',
-        'On the morning the {0} disappeared, a strange {1} appeared beside the {2}.',
-        'The journey began with a {0}, an impossible {1}, and one promise to never mention the {2}.',
-        'At dawn, the {0} carried a {1} into the heart of the {2}.',
-        'The {0} had one job: deliver the {1} before sunset in the {2}.',
-        'When the {0} found the {1}, every path led back to the {2}.',
-        'A secret was hidden inside the {1}, and only the {0} could reach it in the {2}.',
-        'The {0} arrived at the {2} with a {1} and a story nobody believed.',
-        'By the time the {0} reached the {2}, the {1} had begun to glow.',
-        'The {0} traded a promise for the {1}, then disappeared toward the {2}.',
-        'Everyone in the {2} feared the {0} because it carried the {1}.',
-        'The {0} opened the {1}, and the doorway led straight to the {2}.',
-        'On the last night in the {2}, the {0} used the {1} to change everything.',
-        'The {0} was the only one who knew why the {1} was buried beneath the {2}.',
-        'A message on the {1} summoned the {0} to the {2} before the stars went out.',
-        'The {0} promised never to return to the {2}, until the {1} called their name.',
-        'The {0} woke to find the {1} waiting at the gates of the {2}.',
-        'No one could explain how the {0}, the {1}, and the {2} were connected.',
-        'The {0} followed the {1} through the {2}, where the real story began.'
+      const storyStarters = [
+        'At the {2}, the {0} discovered the {1}.',
+        'The {0} arrived at the {2} carrying the {1}.',
+        'When the {0} reached the {2}, the {1} was waiting.',
+        'The {0} hid the {1} somewhere in the {2}.',
+        'Nobody knew why the {0} took the {1} to the {2}.',
+        'The {0} searched the {2} until the {1} appeared.',
+        'The {0} found the {1} at the edge of the {2}.',
+        'At the {2}, the {0} traded the {1} for a secret.',
+        'The {0} entered the {2} with only the {1} for company.',
+        'The {0} woke in the {2}, holding the {1}.',
+        'A warning sent the {0} to the {2} with the {1}.',
+        'The {0} left the {1} at the {2} and never looked back.'
+      ];
+      const storyContinuations = [
+        'Before dawn, the {0} returned to the {2} with the {1}.',
+        'By midnight, the {0} had carried the {1} beyond the {2}.',
+        'Meanwhile, the {0} uncovered the {1} beneath the {2}.',
+        'Later, the {0} brought the {1} back to the {2}.',
+        'At the far end of the {2}, the {0} found the {1} waiting.',
+        'As the night deepened, the {0} guarded the {1} at the {2}.'
       ];
       const countEl = document.getElementById('count');
       const grid = document.getElementById('dice-grid');
@@ -904,13 +903,18 @@
       }
 
       function makeStory() {
-        const words = rolled.slice(0, 3).map(item => item.word);
-        story = storyOpeners[Math.floor(Math.random() * storyOpeners.length)];
-        story = story.replace(/\{(\d)\}/g, (_, position) => {
-          const word = words[position] || 'something unknown';
-          return `<span class="highlight">${word}</span>`;
-        });
-        storyText.innerHTML = story;
+        const sentences = [];
+        for (let start = 0; start < rolled.length; start += 3) {
+          const trio = rolled.slice(start, start + 3);
+          const templatePool = start === 0 ? storyStarters : storyContinuations;
+          let sentence = templatePool[Math.floor(Math.random() * templatePool.length)];
+          sentence = sentence.replace(/\{(\d)\}/g, (_, position) => {
+            const word = trio[position]?.word || 'something unknown';
+            return `<span class="highlight">${word}</span>`;
+          });
+          sentences.push(sentence);
+        }
+        storyText.innerHTML = sentences.join(' ');
       }
 
       function rollDice() {
