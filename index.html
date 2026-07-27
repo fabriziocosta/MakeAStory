@@ -103,7 +103,7 @@
     .die:hover { filter: saturate(1.08) brightness(1.08); transform: rotate(0deg) translateY(-4px); }
     .die.is-rolling { animation: tumble .28s ease-in-out infinite alternate; }
     .die.is-new { animation: die-land .68s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--delay, 0ms); }
-    .die-number { position: absolute; top: 10px; right: 10px; z-index: 1; display: grid; place-items: center; min-width: 62px; height: 20px; padding: 0 6px; border: 1px solid rgba(255,255,255,.18); border-radius: 7px; color: rgba(255,255,255,.66); background: rgba(0,0,0,.15); font-size: 8px; font-weight: 800; letter-spacing: .07em; }
+    .die-type { position: absolute; top: 10px; right: 10px; z-index: 1; display: grid; place-items: center; min-width: 76px; height: 20px; padding: 0 7px; border: 1px solid rgba(255,255,255,.18); border-radius: 7px; color: rgba(255,255,255,.66); background: rgba(0,0,0,.15); font-size: 8px; font-weight: 800; letter-spacing: .07em; }
     .die-stage { position: relative; z-index: 1; display: grid; place-items: center; min-height: 125px; perspective: 560px; }
     .die-cube { --cube-size: 82px; position: relative; width: var(--cube-size); height: var(--cube-size); transform-style: preserve-3d; transform: rotateX(-18deg) rotateY(30deg) rotateZ(var(--cube-tilt, 0deg)); }
     .die.is-new .die-cube { animation: cube-roll .68s cubic-bezier(.18,.8,.25,1) both; animation-delay: var(--delay, 0ms); }
@@ -315,7 +315,7 @@
       function renderDice(animate = false) {
         grid.innerHTML = rolled.map((item, index) => `
           <article class="die die-${getCategory(item[1])} ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--cube-tilt:${index % 2 ? 2 : -2}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item[1]}">
-            <div class="die-number">${categoryLabel(getCategory(item[1]))} ${String(index + 1).padStart(2, '0')}</div>
+            <div class="die-type">${categoryLabel(getCategory(item[1]))}</div>
             <div class="die-stage" aria-hidden="true">
               <div class="die-cube">
                 <div class="cube-face cube-front"><span class="cube-symbol">${item[0]}</span></div>
