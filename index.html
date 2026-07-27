@@ -57,13 +57,6 @@
     button:focus-visible, input:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
 
     .shell { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 24px 0 20px; }
-    .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; font-weight: 750; letter-spacing: -.02em; }
-    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; color: var(--lime-ink); background: var(--lime); box-shadow: 0 8px 24px rgba(217,245,123,.18); font-size: 20px; }
-    .brand small { display: block; color: var(--muted-2); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; margin-top: 1px; }
-    .brand span:last-child { display: block; font-size: 16px; }
-    .top-note { color: var(--muted); font-size: 13px; }
-
     .hero { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 52px 0 29px; }
     .eyebrow { display: flex; align-items: center; gap: 9px; color: var(--lime); font-size: 11px; letter-spacing: .17em; text-transform: uppercase; font-weight: 800; }
     .eyebrow i { display: block; width: 24px; height: 1px; background: var(--lime); }
@@ -150,19 +143,11 @@
     @keyframes cube-roll { 0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(.7); } 48% { transform: rotateX(390deg) rotateY(520deg) rotateZ(25deg) scale(1.08); } 78% { transform: rotateX(710deg) rotateY(660deg) rotateZ(-8deg) scale(1.02); } 100% { transform: rotateX(-18deg) rotateY(30deg) rotateZ(var(--cube-tilt, 0deg)) scale(1); } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
     @media (max-width: 900px) { .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); } .hero { grid-template-columns: 1fr; gap: 24px; } .hero-aside { justify-self: start; } }
-    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .top-note { display: none; } .topbar { padding-top: 17px; } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .roll-button { margin-left: 0; width: 100%; justify-content: center; } .tray { min-height: 0; padding: 23px 16px 29px; } .tray-heading { margin-bottom: 18px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 190px; } .die-cube { --cube-size: 74px; } .story-panel { grid-template-columns: 1fr; gap: 18px; padding: 22px 16px 20px; } .story-copy { padding-left: 50px; } .story-panel::before { left: 19px; top: 17px; font-size: 94px; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
+    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .roll-button { margin-left: 0; width: 100%; justify-content: center; } .tray { min-height: 0; padding: 23px 16px 29px; } .tray-heading { margin-bottom: 18px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 190px; } .die-cube { --cube-size: 74px; } .story-panel { grid-template-columns: 1fr; gap: 18px; padding: 22px 16px 20px; } .story-copy { padding-left: 50px; } .story-panel::before { left: 19px; top: 17px; font-size: 94px; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
   </style>
 </head>
 <body>
   <main class="shell">
-    <header class="topbar">
-      <a class="brand" href="./" aria-label="Story Dice home">
-        <span class="brand-mark" aria-hidden="true">✦</span>
-        <span><small>Make a</small>Story Dice</span>
-      </a>
-      <div class="top-note">A tiny spark can become a whole world.</div>
-    </header>
-
     <section class="hero" aria-labelledby="page-title">
       <div>
         <div class="eyebrow"><i></i> A story starter for curious minds</div>
