@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11111b">
+  <meta name="description" content="Story Dice turns a roll of emojis into a spark for your next story.">
+  <title>Story Dice — Make a story</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f7f4ed;
+      --muted: #aaa6b8;
+      --muted-2: #777386;
+      --night: #11111b;
+      --night-2: #181827;
+      --panel: rgba(35, 34, 52, .82);
+      --line: rgba(255,255,255,.1);
+      --lime: #d9f57b;
+      --lime-ink: #172009;
+      --orange: #ff9e68;
+      --purple: #887cff;
+      --shadow: 0 24px 70px rgba(0,0,0,.3);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: var(--night); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% -10%, rgba(136,124,255,.22), transparent 31rem),
+        radial-gradient(circle at 88% 0%, rgba(255,158,104,.13), transparent 26rem),
+        linear-gradient(145deg, var(--night), #151421 60%, #101017);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
+
+    .shell { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 24px 0 20px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; font-weight: 750; letter-spacing: -.02em; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; color: var(--lime-ink); background: var(--lime); box-shadow: 0 8px 24px rgba(217,245,123,.18); font-size: 20px; }
+    .brand small { display: block; color: var(--muted-2); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; margin-top: 1px; }
+    .brand span:last-child { display: block; font-size: 16px; }
+    .top-note { color: var(--muted); font-size: 13px; }
+
+    .hero { display: grid; grid-template-columns: 1.05fr .95fr; align-items: end; gap: 44px; padding: 52px 0 42px; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; color: var(--lime); font-size: 11px; letter-spacing: .17em; text-transform: uppercase; font-weight: 800; }
+    .eyebrow i { display: block; width: 24px; height: 1px; background: var(--lime); }
+    h1 { max-width: 600px; margin: 16px 0 17px; font-size: clamp(45px, 7vw, 82px); line-height: .95; letter-spacing: -.075em; font-weight: 760; }
+    .hero p { max-width: 480px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.65; }
+    .hero-aside { justify-self: end; max-width: 360px; color: var(--muted); font-size: 13px; }
+    .hero-aside strong { display: block; color: var(--ink); font-size: 15px; margin-bottom: 8px; }
+    .hero-aside em { color: var(--orange); font-style: normal; }
+
+    .workbench { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 28px; background: rgba(24,24,39,.78); box-shadow: var(--shadow); }
+    .workbench::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,.06), transparent 34%); }
+    .controls { position: relative; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+    .control-label { color: var(--muted-2); font-size: 11px; letter-spacing: .13em; text-transform: uppercase; font-weight: 800; }
+    .count-control { display: flex; align-items: center; gap: 10px; }
+    .stepper { display: flex; align-items: center; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 11px; background: rgba(0,0,0,.17); }
+    .stepper button { width: 28px; height: 28px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 19px; line-height: 1; }
+    .stepper button:hover { color: var(--ink); background: rgba(255,255,255,.08); }
+    .count-value { min-width: 27px; text-align: center; color: var(--ink); font-weight: 750; }
+    .packs { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .pack { border: 1px solid transparent; border-radius: 9px; padding: 7px 11px; background: transparent; color: var(--muted); font-size: 12px; }
+    .pack:hover { color: var(--ink); background: rgba(255,255,255,.06); }
+    .pack[aria-pressed="true"] { border-color: rgba(217,245,123,.32); background: rgba(217,245,123,.12); color: var(--lime); }
+    .roll-button { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; border: 0; border-radius: 11px; padding: 11px 16px; background: var(--lime); color: var(--lime-ink); font-weight: 800; box-shadow: 0 8px 20px rgba(217,245,123,.12); transition: transform .2s ease, box-shadow .2s ease; }
+    .roll-button:hover { transform: translateY(-2px); box-shadow: 0 11px 25px rgba(217,245,123,.22); }
+    .roll-button .die-icon { font-size: 17px; }
+
+    .tray { position: relative; min-height: 430px; padding: 34px 34px 42px; }
+    .tray-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 27px; }
+    .tray-heading h2 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+    .tray-heading span { color: var(--muted-2); font-size: 12px; }
+    .dice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); justify-content: center; gap: 15px; align-items: stretch; }
+    .die { --die-a: #ff9e68; --die-b: #b84b34; position: relative; min-height: 151px; padding: 15px 14px 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.15); border-radius: 18px; background: linear-gradient(145deg, var(--die-a), var(--die-b)); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -14px 24px rgba(0,0,0,.12), 0 12px 20px rgba(0,0,0,.2); transform: rotate(var(--tilt, 0deg)); transition: transform .25s ease, filter .25s ease; }
+    .die::before { content: ""; position: absolute; width: 70px; height: 70px; right: -28px; top: -30px; border-radius: 50%; background: rgba(255,255,255,.14); }
+    .die::after { content: ""; position: absolute; width: 85px; height: 14px; bottom: 8px; left: 12px; border-radius: 50%; background: rgba(0,0,0,.11); filter: blur(8px); }
+    .die:hover { filter: saturate(1.08) brightness(1.08); transform: rotate(0deg) translateY(-4px); }
+    .die.is-rolling { animation: tumble .55s ease-in-out infinite alternate; }
+    .die.is-new { animation: pop .45s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--delay, 0ms); }
+    .die-number { position: relative; z-index: 1; color: rgba(255,255,255,.72); font-size: 10px; font-weight: 800; letter-spacing: .14em; }
+    .die-face { position: relative; z-index: 1; display: grid; place-items: center; min-height: 77px; font-size: clamp(38px, 4vw, 52px); filter: drop-shadow(0 4px 3px rgba(0,0,0,.2)); }
+    .die-word { position: relative; z-index: 1; color: #fff7f0; font-size: 12px; font-weight: 800; letter-spacing: .02em; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,.25); }
+    .die:nth-child(3n+2) { --die-a: #9b91ff; --die-b: #5b4bb7; }
+    .die:nth-child(3n+3) { --die-a: #d9f57b; --die-b: #74903b; }
+    .die:nth-child(4n) { --die-a: #70d7cf; --die-b: #277b87; }
+
+    .story-panel { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items: center; padding: 25px 28px 28px; border-top: 1px solid var(--line); background: rgba(10,10,17,.2); }
+    .story-copy { min-width: 0; }
+    .story-kicker { display: flex; justify-content: space-between; align-items: center; color: var(--muted-2); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; font-weight: 800; }
+    .spark { color: var(--orange); font-size: 16px; }
+    .story-copy h2 { margin: 9px 0 10px; font-size: 20px; letter-spacing: -.03em; }
+    .story-text { margin: 0; color: #dedbe6; font-size: 17px; line-height: 1.6; }
+    .story-text .highlight { color: var(--lime); font-weight: 750; }
+    .story-actions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+    .secondary-button { border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; background: rgba(255,255,255,.04); color: var(--ink); font-size: 12px; font-weight: 700; }
+    .secondary-button:hover { border-color: rgba(217,245,123,.4); background: rgba(217,245,123,.1); color: var(--lime); }
+    .copy-status { width: 84px; color: var(--muted-2); font-size: 11px; }
+    .copy-status.show { color: var(--lime); }
+
+    .below { display: flex; justify-content: space-between; gap: 24px; padding: 26px 2px 56px; color: var(--muted); font-size: 12px; }
+    .below p { margin: 0; }
+    .below strong { color: var(--ink); }
+    .shortcut { text-align: right; color: var(--muted-2); }
+    kbd { border: 1px solid var(--line); border-radius: 5px; padding: 2px 5px; color: var(--muted); background: rgba(255,255,255,.05); font-size: 10px; }
+
+    @keyframes tumble { from { transform: rotate(-6deg) scale(.96); } to { transform: rotate(6deg) scale(1.03); } }
+    @keyframes pop { 0% { opacity: .2; transform: translateY(10px) rotate(8deg) scale(.8); } 70% { transform: translateY(-4px) rotate(-2deg) scale(1.04); } 100% { opacity: 1; transform: rotate(var(--tilt, 0deg)) scale(1); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+    @media (max-width: 900px) { .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); } .hero { grid-template-columns: 1fr; gap: 24px; } .hero-aside { justify-self: start; } }
+    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .top-note { display: none; } .topbar { padding-top: 17px; } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .roll-button { margin-left: 0; width: 100%; justify-content: center; } .tray { min-height: 0; padding: 23px 16px 29px; } .tray-heading { margin-bottom: 18px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 142px; } .story-panel { grid-template-columns: 1fr; gap: 18px; padding: 22px 16px 20px; } .story-actions { justify-content: flex-start; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Story Dice home">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span><small>Make a</small>Story Dice</span>
+      </a>
+      <div class="top-note">A tiny spark can become a whole world.</div>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <div class="eyebrow"><i></i> A prompt generator for curious minds</div>
+        <h1 id="page-title">Roll into<br><em style="color:var(--lime);font-style:normal">a story.</em></h1>
+        <p>Throw a handful of picture dice. Then connect the unexpected dots into something only you could write.</p>
+      </div>
+      <div class="hero-aside"><strong>There are no wrong rolls.</strong> A crown can be a secret, a <em>moon</em> can be a doorway, and a tiny key might unlock the whole plot.</div>
+    </section>
+
+    <section class="workbench" aria-label="Story dice generator">
+      <div class="controls" aria-label="Dice controls">
+        <div class="count-control">
+          <span class="control-label">Dice</span>
+          <div class="stepper" role="group" aria-label="Number of dice">
+            <button type="button" id="minus" aria-label="Use fewer dice">−</button>
+            <span class="count-value" id="count" aria-live="polite">6</span>
+            <button type="button" id="plus" aria-label="Use more dice">+</button>
+          </div>
+        </div>
+        <div class="packs" role="group" aria-label="Choose an emoji pack">
+          <span class="control-label">Mood</span>
+          <button class="pack" type="button" data-pack="adventure" aria-pressed="true">Adventure</button>
+          <button class="pack" type="button" data-pack="whimsy" aria-pressed="false">Whimsy</button>
+          <button class="pack" type="button" data-pack="mystery" aria-pressed="false">Mystery</button>
+        </div>
+        <button class="roll-button" type="button" id="roll"><span class="die-icon" aria-hidden="true">⚄</span> Roll the dice</button>
+      </div>
+
+      <div class="tray">
+        <div class="tray-heading"><h2>Your story ingredients</h2><span id="roll-note">Roll to rearrange the universe</span></div>
+        <div class="dice-grid" id="dice-grid" aria-live="polite" aria-label="Rolled story ingredients"></div>
+      </div>
+
+      <div class="story-panel">
+        <div class="story-copy">
+          <div class="story-kicker"><span>One possible beginning</span><span class="spark" aria-hidden="true">✦</span></div>
+          <h2>What happens next?</h2>
+          <p class="story-text" id="story-text"></p>
+        </div>
+        <div class="story-actions">
+          <button class="secondary-button" type="button" id="copy">Copy story</button>
+          <button class="secondary-button" type="button" id="reroll" aria-label="Roll the dice again">↻ Reroll</button>
+          <span class="copy-status" id="copy-status" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="below">
+      <p><strong>How to play:</strong> use every die in a single story. The weirder the connection, the better.</p>
+      <p class="shortcut">Quick roll <kbd>Space</kbd></p>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const packs = {
+        adventure: [
+          ['🧭', 'compass'], ['🗝️', 'key'], ['🌙', 'moon'], ['🦊', 'fox'], ['🏰', 'castle'], ['🌊', 'wave'],
+          ['🪶', 'feather'], ['🔥', 'flame'], ['🗺️', 'map'], ['👑', 'crown'], ['🛶', 'canoe'], ['🐉', 'dragon'],
+          ['⛰️', 'mountain'], ['🕯️', 'candle'], ['🌲', 'forest'], ['🧳', 'suitcase'], ['🦉', 'owl'], ['⚓', 'anchor']
+        ],
+        whimsy: [
+          ['🍄', 'mushroom'], ['🫧', 'bubble'], ['🧚', 'fairy'], ['🌈', 'rainbow'], ['🧁', 'cupcake'], ['🐸', 'frog'],
+          ['🎈', 'balloon'], ['🦄', 'unicorn'], ['🌼', 'flower'], ['🧶', 'yarn'], ['🎩', 'hat'], ['🐌', 'snail'],
+          ['🪄', 'magic wand'], ['🍓', 'berry'], ['🛸', 'spaceship'], ['🎠', 'carousel'], ['☁️', 'cloud'], ['🧸', 'teddy']
+        ],
+        mystery: [
+          ['🕵️', 'detective'], ['🔍', 'clue'], ['🩸', 'red mark'], ['🗝️', 'key'], ['🕰️', 'clock'], ['🕸️', 'web'],
+          ['👁️', 'eye'], ['📜', 'letter'], ['🚪', 'door'], ['🌫️', 'fog'], ['🎭', 'mask'], ['🐦‍⬛', 'raven'],
+          ['🧪', 'potion'], ['📸', 'photograph'], ['🧤', 'glove'], ['💎', 'gem'], ['🕯️', 'candle'], ['🗃️', 'file']
+        ]
+      };
+
+      const storyOpeners = [
+        'At midnight, the {0} found a {1} hidden beneath the {2}.',
+        'Nobody believed the {0} until it returned with a {1} and a warning about the {2}.',
+        'The {0} was the only thing that could lead them past the {1}, but first they had to trust the {2}.',
+        'On the morning the {0} disappeared, a strange {1} appeared beside the {2}.',
+        'The journey began with a {0}, an impossible {1}, and one promise to never mention the {2}.'
+      ];
+      const countEl = document.getElementById('count');
+      const grid = document.getElementById('dice-grid');
+      const storyText = document.getElementById('story-text');
+      const rollNote = document.getElementById('roll-note');
+      const copyStatus = document.getElementById('copy-status');
+      let count = 6;
+      let activePack = 'adventure';
+      let rolled = [];
+      let story = '';
+
+      const randomFrom = (items) => items[Math.floor(Math.random() * items.length)];
+      const shuffle = (items) => [...items].sort(() => Math.random() - .5);
+
+      function renderDice(animate = false) {
+        grid.innerHTML = rolled.map((item, index) => `
+          <article class="die ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item[1]}">
+            <div class="die-number">DIE ${String(index + 1).padStart(2, '0')}</div>
+            <div class="die-face" aria-hidden="true">${item[0]}</div>
+            <div class="die-word">${item[1]}</div>
+          </article>
+        `).join('');
+      }
+
+      function makeStory() {
+        const words = rolled.slice(0, 3).map(item => item[1]);
+        story = storyOpeners[Math.floor(Math.random() * storyOpeners.length)];
+        story = story.replace(/\{(\d)\}/g, (_, position) => `<span class="highlight">${words[position] || 'something unknown'}</span>`);
+        storyText.innerHTML = story;
+      }
+
+      function rollDice() {
+        const pool = packs[activePack];
+        rolled = shuffle(pool).slice(0, count);
+        countEl.textContent = count;
+        grid.querySelectorAll('.die').forEach(die => die.classList.add('is-rolling'));
+        setTimeout(() => {
+          renderDice(true);
+          makeStory();
+          rollNote.textContent = `${count} ingredients in play`;
+        }, 300);
+      }
+
+      function changeCount(delta) {
+        count = Math.max(3, Math.min(12, count + delta));
+        countEl.textContent = count;
+        rollDice();
+      }
+
+      document.getElementById('minus').addEventListener('click', () => changeCount(-1));
+      document.getElementById('plus').addEventListener('click', () => changeCount(1));
+      document.getElementById('roll').addEventListener('click', rollDice);
+      document.getElementById('reroll').addEventListener('click', rollDice);
+      document.querySelectorAll('.pack').forEach(button => {
+        button.addEventListener('click', () => {
+          activePack = button.dataset.pack;
+          document.querySelectorAll('.pack').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+          rollDice();
+        });
+      });
+      document.getElementById('copy').addEventListener('click', async () => {
+        const plain = storyText.textContent;
+        try {
+          await navigator.clipboard.writeText(plain);
+          copyStatus.textContent = 'Copied!';
+          copyStatus.classList.add('show');
+          setTimeout(() => { copyStatus.textContent = ''; copyStatus.classList.remove('show'); }, 1800);
+        } catch (error) {
+          copyStatus.textContent = 'Select to copy';
+        }
+      });
+      document.addEventListener('keydown', event => {
+        if (event.code === 'Space' && !['INPUT', 'TEXTAREA', 'BUTTON'].includes(document.activeElement.tagName)) {
+          event.preventDefault();
+          rollDice();
+        }
+      });
+
+      rollDice();
+    })();
+  </script>
+</body>
+</html>
