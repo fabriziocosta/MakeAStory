@@ -87,13 +87,12 @@
     .pack { border: 1px solid transparent; border-radius: 9px; padding: 8px 13px; background: transparent; color: #b8b4c2; font-size: 12px; }
     .pack:hover { color: var(--ink); background: rgba(255,255,255,.06); }
     .pack[aria-pressed="true"] { border-color: rgba(217,245,123,.32); background: rgba(217,245,123,.12); color: var(--lime); }
-    .roll-button { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; border: 0; border-radius: 11px; padding: 11px 16px; background: var(--lime); color: var(--lime-ink); font-weight: 800; box-shadow: 0 8px 20px rgba(217,245,123,.12); transition: transform .2s ease, box-shadow .2s ease; }
+    .roll-button { display: inline-flex; align-items: center; gap: 9px; margin-left: auto; border: 0; border-radius: 11px; padding: 8px 14px 8px 11px; background: var(--lime); color: var(--lime-ink); font-weight: 800; box-shadow: 0 8px 20px rgba(217,245,123,.12); transition: transform .2s ease, box-shadow .2s ease; }
     .roll-button:hover { transform: translateY(-2px); box-shadow: 0 11px 25px rgba(217,245,123,.22); }
-    .roll-button .die-icon { font-size: 17px; }
+    .roll-button .die-icon { font-size: 28px; line-height: .9; }
 
     .tray { position: relative; min-height: 430px; padding: 29px 34px 42px; background: radial-gradient(circle at 50% 42%, rgba(117,109,194,.11), transparent 52%); }
-    .tray-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 27px; }
-    .tray-heading h2 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.015em; }
+    .tray-heading { display: flex; align-items: center; justify-content: flex-end; gap: 18px; margin-bottom: 27px; }
     .tray-heading strong { color: var(--ink); font-weight: 700; }
     .tray-heading span { color: var(--muted-2); font-size: 12px; }
     .dice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); justify-content: center; gap: 15px; align-items: stretch; }
@@ -188,11 +187,11 @@
           <button class="pack" type="button" data-pack="whimsy" aria-pressed="false">Whimsy</button>
           <button class="pack" type="button" data-pack="mystery" aria-pressed="false">Mystery</button>
         </div>
-        <button class="roll-button" type="button" id="roll"><span class="die-icon" aria-hidden="true">⚄</span> Roll the dice</button>
+        <button class="roll-button" type="button" id="roll"><span class="die-icon" aria-hidden="true">⚄</span> Roll</button>
       </div>
 
       <div class="tray">
-        <div class="tray-heading"><h2>Your story ingredients</h2><span id="roll-note"><strong>There are no wrong rolls.</strong> Roll to rearrange the universe</span></div>
+        <div class="tray-heading"><span id="roll-note"><strong>There are no wrong rolls.</strong> Roll to rearrange the universe</span></div>
         <div class="dice-grid" id="dice-grid" aria-live="polite" aria-label="Rolled story ingredients"></div>
       </div>
 
