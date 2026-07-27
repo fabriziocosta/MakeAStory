@@ -130,7 +130,7 @@
     .die-character { --die-a: #b3c866; --die-b: #65752f; }
     .die-world { --die-a: #5cabb0; --die-b: #276c77; }
 
-    .story-panel { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 30px; align-items: center; padding: 29px 28px 31px; border-top: 1px solid rgba(255,255,255,.12); background: radial-gradient(circle at 22% 30%, rgba(255,158,104,.12), transparent 38%), rgba(13,13,21,.48); }
+    .story-panel { position: relative; display: grid; grid-template-columns: 1fr; gap: 30px; align-items: center; padding: 29px 28px 31px; border-top: 1px solid rgba(255,255,255,.12); background: radial-gradient(circle at 22% 30%, rgba(255,158,104,.12), transparent 38%), rgba(13,13,21,.48); }
     .story-panel::before { content: "“"; position: absolute; top: 18px; left: 25px; color: rgba(255,158,104,.54); font-family: Georgia, serif; font-size: 112px; line-height: .8; text-shadow: 0 0 22px rgba(255,158,104,.18); pointer-events: none; }
     .story-copy { min-width: 0; padding-left: 62px; }
     .story-kicker { display: flex; justify-content: space-between; align-items: center; color: #9d98ab; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; font-weight: 800; }
@@ -138,11 +138,6 @@
     .story-copy h2 { position: relative; margin: 9px 0 10px; font-size: 22px; letter-spacing: -.035em; }
     .story-text { position: relative; margin: 0; color: #ede8df; font-size: 20px; line-height: 1.55; }
     .story-text .highlight { color: var(--lime); font-weight: 750; text-decoration: underline; text-decoration-color: rgba(217,245,123,.35); text-decoration-thickness: 2px; text-underline-offset: 4px; }
-    .story-actions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
-    .secondary-button { border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; background: rgba(255,255,255,.04); color: var(--ink); font-size: 12px; font-weight: 700; }
-    .secondary-button:hover { border-color: rgba(217,245,123,.4); background: rgba(217,245,123,.1); color: var(--lime); }
-    .copy-status { width: 84px; color: var(--muted-2); font-size: 11px; }
-    .copy-status.show { color: var(--lime); }
 
     .below { display: flex; justify-content: space-between; gap: 24px; padding: 26px 2px 56px; color: var(--muted); font-size: 12px; }
     .below p { margin: 0; }
@@ -156,7 +151,7 @@
     @keyframes cube-roll { 0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(.7); } 48% { transform: rotateX(390deg) rotateY(520deg) rotateZ(25deg) scale(1.08); } 78% { transform: rotateX(710deg) rotateY(660deg) rotateZ(-8deg) scale(1.02); } 100% { transform: rotateX(-18deg) rotateY(30deg) rotateZ(var(--cube-tilt, 0deg)) scale(1); } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
     @media (max-width: 900px) { .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); } .hero { grid-template-columns: 1fr; gap: 24px; } .hero-aside { justify-self: start; } }
-    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .top-note { display: none; } .topbar { padding-top: 17px; } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .roll-button { margin-left: 0; width: 100%; justify-content: center; } .tray { min-height: 0; padding: 23px 16px 29px; } .tray-heading { margin-bottom: 18px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 190px; } .die-cube { --cube-size: 74px; } .story-panel { grid-template-columns: 1fr; gap: 18px; padding: 22px 16px 20px; } .story-copy { padding-left: 50px; } .story-panel::before { left: 19px; top: 17px; font-size: 94px; } .story-actions { justify-content: flex-start; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
+    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .top-note { display: none; } .topbar { padding-top: 17px; } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .roll-button { margin-left: 0; width: 100%; justify-content: center; } .tray { min-height: 0; padding: 23px 16px 29px; } .tray-heading { margin-bottom: 18px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 190px; } .die-cube { --cube-size: 74px; } .story-panel { grid-template-columns: 1fr; gap: 18px; padding: 22px 16px 20px; } .story-copy { padding-left: 50px; } .story-panel::before { left: 19px; top: 17px; font-size: 94px; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
   </style>
 </head>
 <body>
@@ -206,11 +201,6 @@
           <div class="story-kicker"><span>Your story spark</span><span class="spark" aria-hidden="true">✦</span></div>
           <h2>Your story starts here</h2>
           <p class="story-text" id="story-text"></p>
-        </div>
-        <div class="story-actions">
-          <button class="secondary-button" type="button" id="copy">Copy story</button>
-          <button class="secondary-button" type="button" id="reroll" aria-label="Roll the dice again">↻ Reroll</button>
-          <span class="copy-status" id="copy-status" aria-live="polite"></span>
         </div>
       </div>
     </section>
@@ -295,7 +285,6 @@
       const grid = document.getElementById('dice-grid');
       const storyText = document.getElementById('story-text');
       const rollNote = document.getElementById('roll-note');
-      const copyStatus = document.getElementById('copy-status');
       let count = 6;
       let activePack = 'adventure';
       let rolled = [];
@@ -367,24 +356,12 @@
       document.getElementById('minus').addEventListener('click', () => changeCount(-1));
       document.getElementById('plus').addEventListener('click', () => changeCount(1));
       document.getElementById('roll').addEventListener('click', rollDice);
-      document.getElementById('reroll').addEventListener('click', rollDice);
       document.querySelectorAll('.pack').forEach(button => {
         button.addEventListener('click', () => {
           activePack = button.dataset.pack;
           document.querySelectorAll('.pack').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
           rollDice();
         });
-      });
-      document.getElementById('copy').addEventListener('click', async () => {
-        const plain = storyText.textContent;
-        try {
-          await navigator.clipboard.writeText(plain);
-          copyStatus.textContent = 'Copied!';
-          copyStatus.classList.add('show');
-          setTimeout(() => { copyStatus.textContent = ''; copyStatus.classList.remove('show'); }, 1800);
-        } catch (error) {
-          copyStatus.textContent = 'Select to copy';
-        }
       });
       document.addEventListener('keydown', event => {
         if (event.code === 'Space' && !['INPUT', 'TEXTAREA', 'BUTTON'].includes(document.activeElement.tagName)) {
