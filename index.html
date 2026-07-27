@@ -85,9 +85,6 @@
     .roll-button .die-icon { font-size: 28px; line-height: .9; }
 
     .tray { position: relative; order: 2; min-height: 430px; padding: 29px 34px 42px; background: radial-gradient(circle at 50% 42%, rgba(117,109,194,.11), transparent 52%); }
-    .tray-heading { display: flex; align-items: center; justify-content: flex-end; gap: 18px; margin-bottom: 27px; }
-    .tray-heading strong { color: var(--ink); font-weight: 700; }
-    .tray-heading span { color: var(--muted-2); font-size: 12px; }
     .dice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); justify-content: center; gap: 15px; align-items: stretch; }
     .die { --die-a: #c97c58; --die-b: #843c31; position: relative; min-height: 198px; padding: 13px 14px 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(0,0,0,.12)); box-shadow: inset 0 1px 0 rgba(255,255,255,.11), 0 16px 23px rgba(0,0,0,.3), 0 2px 0 rgba(255,255,255,.08); transform: rotate(var(--tilt, 0deg)); transition: transform .25s ease, filter .25s ease; }
     .die::before { content: ""; position: absolute; width: 70px; height: 70px; right: -28px; top: -30px; border-radius: 50%; background: rgba(255,255,255,.14); }
@@ -143,7 +140,7 @@
     @keyframes cube-roll { 0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(.7); } 48% { transform: rotateX(390deg) rotateY(520deg) rotateZ(25deg) scale(1.08); } 78% { transform: rotateX(710deg) rotateY(660deg) rotateZ(-8deg) scale(1.02); } 100% { transform: rotateX(-18deg) rotateY(30deg) rotateZ(var(--cube-tilt, 0deg)) scale(1); } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
     @media (max-width: 900px) { .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); } .hero { grid-template-columns: 1fr; gap: 24px; } .hero-aside { justify-self: start; } }
-    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .roll-button { margin-left: 0; width: 100%; justify-content: center; } .tray { min-height: 0; padding: 23px 16px 29px; } .tray-heading { margin-bottom: 18px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 190px; } .die-cube { --cube-size: 74px; } .story-panel { grid-template-columns: 1fr; gap: 18px; padding: 22px 16px 20px; } .story-copy { padding-left: 50px; } .story-panel::before { left: 19px; top: 17px; font-size: 94px; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
+    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .roll-button { margin-left: 0; width: 100%; justify-content: center; } .tray { min-height: 0; padding: 23px 16px 29px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 190px; } .die-cube { --cube-size: 74px; } .story-panel { grid-template-columns: 1fr; gap: 18px; padding: 22px 16px 20px; } .story-copy { padding-left: 50px; } .story-panel::before { left: 19px; top: 17px; font-size: 94px; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
   </style>
 </head>
 <body>
@@ -176,7 +173,6 @@
       </div>
 
       <div class="tray">
-        <div class="tray-heading"><span id="roll-note"><strong>There are no wrong rolls.</strong> Roll to rearrange the universe</span></div>
         <div class="dice-grid" id="dice-grid" aria-live="polite" aria-label="Rolled story ingredients"></div>
       </div>
 
@@ -268,7 +264,6 @@
       const countEl = document.getElementById('count');
       const grid = document.getElementById('dice-grid');
       const storyText = document.getElementById('story-text');
-      const rollNote = document.getElementById('roll-note');
       let count = 6;
       let activePack = 'adventure';
       let rolled = [];
@@ -327,7 +322,6 @@
         setTimeout(() => {
           renderDice(true);
           makeStory();
-          rollNote.textContent = `${count} ingredients in play`;
         }, 300);
       }
 
