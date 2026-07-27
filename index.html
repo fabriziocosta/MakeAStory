@@ -193,7 +193,7 @@
 
   <script>
     (() => {
-      const packs = {
+      const seedPacks = {
         adventure: [
           ['🧭', 'compass'], ['🗝️', 'key'], ['🌙', 'moon'], ['🦊', 'fox'], ['🏰', 'castle'], ['🌊', 'wave'],
           ['🪶', 'feather'], ['🔥', 'flame'], ['🗺️', 'map'], ['👑', 'crown'], ['🛶', 'canoe'], ['🐉', 'dragon'],
@@ -254,6 +254,110 @@
         ]
       };
 
+      const categoryRules = [
+        ['character', /bear|bee|black cat|butterfly|camel|cat|chick|climber|crab|detective|dinosaur|dolphin|dragon|duck|eagle|elephant|fairy|flamingo|fox|frog|hamster|horse|kitten|ladybird|lion|long-neck|mountaineer|octopus|otter|owl|parrot|penguin|puppy|rabbit|raven|scorpion|shark|silhouette|sloth|snake|spider|squid|turtle|unicorn|whale|wizard|wolf/],
+        ['place', /airplane|ambulance|bridge|building|cabin|castle|city|camping|campsite|desert|forest|galaxy|glacier|hall|helicopter|home|hospital|house|island|mountain|motorboat|rain|rocket|school|ship|snowflake|space|subway|sun|temple|tent|train|tunnel|volcano|wave/],
+        ['object', /balloon|bell|bow|clapper|drum|flame|flashlight|guitar|hammer|kite|ladder|microphone|piano|roller coaster|saxophone|scissors|slide|sparkles|storm|swords|tornado|trumpet|violin/]
+      ];
+      const getSeedCategory = word => (categoryRules.find(([, rule]) => rule.test(word)) || ['object'])[0];
+
+      // New story ingredients are stored in their category from the start.
+      const additionalPacks = {
+        adventure: {
+          characters: [
+            ['🧑‍🚀', 'astronaut'], ['🧑‍🎨', 'artist'], ['🧑‍🍳', 'chef'], ['🧑‍🔬', 'scientist'], ['🧑‍🚒', 'firefighter'], ['🧑‍✈️', 'pilot'],
+            ['🧑‍🌾', 'farmer'], ['🧑‍⚕️', 'healer'], ['🧝', 'elf'], ['🧝‍♀️', 'elf queen'], ['🧝‍♂️', 'elf ranger'], ['🧞', 'genie'],
+            ['🧞‍♀️', 'genie'], ['🧞‍♂️', 'genie'], ['🧜', 'merperson'], ['🧜‍♀️', 'mermaid'], ['🧜‍♂️', 'merman'], ['🧚‍♀️', 'fairy'],
+            ['🧚‍♂️', 'fairy'], ['🧛', 'vampire'], ['🧛‍♀️', 'vampire'], ['🧛‍♂️', 'vampire'], ['🧟', 'zombie'], ['🧟‍♀️', 'zombie'],
+            ['🧟‍♂️', 'zombie'], ['🤴', 'prince'], ['👸', 'princess'], ['🥷', 'ninja'], ['🥋', 'martial artist'], ['🦸', 'superhero'],
+            ['🦸‍♀️', 'superheroine'], ['🦸‍♂️', 'superhero'], ['🦹', 'supervillain'], ['🦹‍♀️', 'supervillainess']
+          ],
+          objects: [
+            ['🪃', 'boomerang'], ['🪓', 'axe'], ['🗡️', 'dagger'], ['🏺', 'urn'], ['🪬', 'charm'], ['🔮', 'crystal ball'],
+            ['🪵', 'log'], ['🪆', 'nesting doll'], ['🪝', 'hook'], ['🛒', 'cart'], ['🛞', 'wheel'], ['🧯', 'fire extinguisher'],
+            ['🪣', 'bucket'], ['🧺', 'basket'], ['🧴', 'canteen'], ['📣', 'megaphone'], ['📡', 'satellite'], ['🛏️', 'bedroll'],
+            ['🪟', 'window'], ['🪄', 'magic wand'], ['🧨', 'firecracker'], ['🗃️', 'archive box'], ['🧮', 'abacus'], ['🪢', 'knot'],
+            ['🗜️', 'clamp'], ['🪛', 'screwdriver'], ['⚙️', 'gear'], ['📦', 'parcel'], ['🔩', 'bolt'], ['🧲', 'magnet'],
+            ['🪤', 'trap'], ['🪧', 'signpost'], ['🛎️', 'bell']
+          ],
+          places: [
+            ['🏔️', 'high peak'], ['🌄', 'sunrise valley'], ['🌅', 'shore at dawn'], ['🌴', 'palm grove'], ['🌁', 'foggy bridge'], ['🌆', 'twilight city'],
+            ['🌇', 'sunset city'], ['🏙️', 'skyline'], ['🏘️', 'village'], ['🏡', 'homestead'], ['🏭', 'factory'], ['🕌', 'mosque'],
+            ['🕍', 'synagogue'], ['⛪', 'chapel'], ['🛕', 'shrine'], ['🗼', 'tower'], ['🗽', 'statue island'], ['🎡', 'fairground'],
+            ['🎢', 'adventure park'], ['🎪', 'big top'], ['🚉', 'station'], ['🛤️', 'railway'], ['🛣️', 'highway'], ['🛬', 'landing field'],
+            ['🛫', 'airfield'], ['🛳️', 'ocean liner'], ['⛴️', 'ferry'], ['🏞️', 'national park'], ['🛖', 'hut'], ['🗾', 'island map'],
+            ['🏟️', 'stadium'], ['⛲', 'fountain'], ['🚏', 'crossroads']
+          ]
+        },
+        whimsy: {
+          characters: [
+            ['🧙‍♀️', 'witch'], ['🧙‍♂️', 'wizard'], ['🧝‍♀️', 'elf'], ['🧝‍♂️', 'elf'], ['🧞‍♀️', 'genie'], ['🧞‍♂️', 'genie'],
+            ['🧜‍♀️', 'mermaid'], ['🧜‍♂️', 'merman'], ['🧚‍♀️', 'fairy'], ['🧚‍♂️', 'fairy'], ['🧛‍♀️', 'vampire'], ['🧛‍♂️', 'vampire'],
+            ['🧟‍♀️', 'zombie'], ['🧟‍♂️', 'zombie'], ['🦸‍♀️', 'superheroine'], ['🦸‍♂️', 'superhero'], ['🦹‍♀️', 'supervillainess'], ['🦹‍♂️', 'supervillain'],
+            ['🥷', 'ninja'], ['🤠', 'cowboy'], ['👸', 'princess'], ['🤴', 'prince'], ['🧑‍🎄', 'elf helper'], ['🎅', 'santa'],
+            ['🤡', 'clown'], ['🥸', 'disguise'], ['🦓', 'zebra'], ['🦒', 'giraffe'], ['🦘', 'kangaroo'], ['🦙', 'llama'],
+            ['🦚', 'peacock'], ['🦢', 'swan'], ['🦨', 'skunk'], ['🦡', 'badger']
+          ],
+          objects: [
+            ['🪅', 'pinata'], ['🎃', 'pumpkin'], ['🎊', 'confetti'], ['🎉', 'party popper'], ['🎏', 'carp streamer'], ['🎎', 'dolls'],
+            ['🪀', 'yo-yo'], ['🪩', 'disco ball'], ['🎯', 'target'], ['🎳', 'bowling ball'], ['🪃', 'boomerang'], ['🪇', 'maracas'],
+            ['🪕', 'banjo'], ['🪈', 'flute'], ['🪗', 'accordion'], ['🪘', 'hand drum'], ['🔔', 'bell'], ['🪆', 'nesting doll'],
+            ['🧿', 'charm'], ['🪞', 'hand mirror'], ['🛷', 'sled'], ['🛹', 'skateboard'], ['🛼', 'roller skate'], ['🛶', 'canoe'],
+            ['🪂', 'parachute'], ['🧺', 'picnic basket'], ['🪣', 'bucket'], ['🧴', 'bottle'], ['🧷', 'safety pin'], ['🪄', 'magic wand'],
+            ['🔮', 'crystal ball'], ['🎁', 'gift'], ['🧲', 'magnet'], ['🧳', 'suitcase']
+          ],
+          places: [
+            ['🏡', 'cottage'], ['🏘️', 'village'], ['🏯', 'fairy castle'], ['🕌', 'palace'], ['🕍', 'storybook hall'], ['⛪', 'chapel'],
+            ['🛕', 'enchanted shrine'], ['🗼', 'tower'], ['🗽', 'statue garden'], ['🏟️', 'stadium'], ['🎡', 'fairground'], ['🎢', 'roller park'],
+            ['🎪', 'circus'], ['🎠', 'carousel'], ['🏙️', 'city'], ['🌇', 'sunset town'], ['🌆', 'twilight town'], ['🌉', 'moonlit bridge'],
+            ['🌁', 'misty town'], ['🏞️', 'meadow'], ['🌅', 'seaside'], ['🌄', 'hilltop'], ['🏔️', 'mountain'], ['🌴', 'palm garden'],
+            ['🌺', 'flower garden'], ['🌼', 'flower field'], ['🌷', 'tulip garden'], ['🌸', 'blossom grove'], ['🌊', 'seaside'], ['🏝️', 'island'],
+            ['🛖', 'tiny hut'], ['⛲', 'fountain'], ['🚏', 'bus stop']
+          ]
+        },
+        mystery: {
+          characters: [
+            ['🕵️‍♀️', 'detective'], ['🕵️‍♂️', 'detective'], ['👮', 'police officer'], ['👮‍♀️', 'police officer'], ['👮‍♂️', 'police officer'], ['🧑‍⚖️', 'judge'],
+            ['🧑‍💼', 'office worker'], ['🧑‍🔧', 'mechanic'], ['🧑‍💻', 'hacker'], ['🥷', 'ninja'], ['🤵', 'stranger'], ['👰', 'bride'],
+            ['🧛', 'vampire'], ['🧟', 'zombie'], ['🧙', 'witch'], ['🧙‍♀️', 'witch'], ['🧙‍♂️', 'wizard'], ['🦹', 'villain'],
+            ['🦹‍♀️', 'villainess'], ['🦹‍♂️', 'villain'], ['🦸', 'masked hero'], ['🦸‍♀️', 'masked heroine'], ['🐀', 'rat'], ['🦝', 'raccoon'],
+            ['🦊', 'fox'], ['🦅', 'eagle'], ['🦢', 'swan'], ['🦋', 'butterfly'], ['🐈', 'cat'], ['🐕', 'hound'],
+            ['🐦', 'bird'], ['🕊️', 'dove'], ['🐉', 'dragon'], ['🦌', 'deer']
+          ],
+          objects: [
+            ['🧪', 'test tube'], ['🧫', 'petri dish'], ['🔬', 'microscope'], ['🧬', 'DNA'], ['🩺', 'stethoscope'], ['🩻', 'x-ray'],
+            ['⚖️', 'scales'], ['📂', 'folder'], ['🗂️', 'file dividers'], ['🗄️', 'filing cabinet'], ['📎', 'paperclip'], ['🖇️', 'linked clips'],
+            ['📐', 'set square'], ['📏', 'ruler'], ['📝', 'memo'], ['🗒️', 'notepad'], ['📒', 'ledger'], ['📓', 'notebook'],
+            ['📔', 'journal'], ['📕', 'red book'], ['📗', 'green book'], ['📘', 'blue book'], ['📙', 'orange book'], ['🪬', 'talisman'],
+            ['🗡️', 'dagger'], ['🔪', 'knife'], ['💣', 'bomb'], ['⛓️', 'chains'], ['🔗', 'link'], ['🪢', 'knot'],
+            ['🧳', 'suitcase'], ['🪞', 'mirror'], ['🕯️', 'candle']
+          ],
+          places: [
+            ['🗻', 'mountain'], ['🏞️', 'reserve'], ['🌁', 'fog bridge'], ['🌆', 'evening city'], ['🌇', 'sunset city'], ['🏙️', 'city'],
+            ['🏘️', 'neighborhood'], ['🏡', 'old house'], ['🛖', 'shack'], ['🏟️', 'stadium'], ['🕌', 'mosque'], ['🕍', 'synagogue'],
+            ['⛪', 'church'], ['🛕', 'temple'], ['🗼', 'tower'], ['🗽', 'monument'], ['🎭', 'theater'], ['🎪', 'circus'],
+            ['🎬', 'cinema'], ['🚉', 'station'], ['🚊', 'tram stop'], ['🚋', 'railcar'], ['🛤️', 'tracks'], ['🛣️', 'road'],
+            ['⛴️', 'ferry terminal'], ['🛳️', 'liner'], ['🛬', 'airport arrival'], ['🛫', 'airport departure'], ['🌋', 'volcano'], ['🏜️', 'desert'],
+            ['🌲', 'woods'], ['🌳', 'grove'], ['🌴', 'island']
+          ]
+        }
+      };
+
+      const categoryKeys = { character: 'characters', object: 'objects', place: 'places' };
+      const makeItem = (item, category) => ({ emoji: item[0], word: item[1], category });
+      const packs = Object.fromEntries(Object.entries(seedPacks).map(([name, items]) => {
+        const grouped = { character: [], object: [], place: [] };
+        items.forEach(item => grouped[getSeedCategory(item[1])].push(makeItem(item, getSeedCategory(item[1]))));
+        Object.entries(categoryKeys).forEach(([category, key]) => {
+          additionalPacks[name][key].forEach(item => grouped[category].push(makeItem(item, category)));
+        });
+        return [name, {
+          characters: grouped.character,
+          objects: grouped.object,
+          places: grouped.place
+        }];
+      }));
+
       const storyOpeners = [
         'At midnight, the {0} found a {1} hidden beneath the {2}.',
         'Nobody believed the {0} until it returned with a {1} and a warning about the {2}.',
@@ -286,23 +390,17 @@
       let story = '';
 
       const shuffle = (items) => [...items].sort(() => Math.random() - .5);
-      const categoryRules = [
-        ['character', /bear|bee|black cat|butterfly|camel|cat|chick|climber|crab|detective|dinosaur|dolphin|dragon|duck|eagle|elephant|fairy|flamingo|fox|frog|hamster|horse|kitten|ladybird|lion|long-neck|mountaineer|octopus|otter|owl|parrot|penguin|puppy|rabbit|raven|scorpion|shark|silhouette|sloth|snake|spider|squid|turtle|unicorn|whale|wizard|wolf/],
-        ['place', /airplane|ambulance|bridge|building|cabin|castle|city|camping|desert|forest|galaxy|glacier|hall|helicopter|home|hospital|house|island|mountain|motorboat|rain|rocket|school|ship|snowflake|space|subway|sun|temple|tent|train|tunnel|volcano|wave/],
-        ['object', /balloon|bell|bow|clapper|drum|flame|flashlight|guitar|hammer|kite|ladder|microphone|piano|roller coaster|saxophone|scissors|slide|sparkles|storm|swords|tornado|trumpet|violin/]
-      ];
       const rollSequence = ['character', 'object', 'place'];
-      const getCategory = word => (categoryRules.find(([, rule]) => rule.test(word)) || ['object'])[0];
       const makePips = count => `<span class="cube-pips pips-${count}">${'<i></i>'.repeat(count)}</span>`;
       const categoryLabel = category => category.toUpperCase();
 
       function renderDice(animate = false) {
         grid.innerHTML = rolled.map((item, index) => `
-          <article class="die die-${getCategory(item[1])} ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--cube-tilt:${index % 2 ? 2 : -2}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item[1]}">
-            <div class="die-type">${categoryLabel(getCategory(item[1]))}</div>
+          <article class="die die-${item.category} ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--cube-tilt:${index % 2 ? 2 : -2}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item.word}">
+            <div class="die-type">${categoryLabel(item.category)}</div>
             <div class="die-stage" aria-hidden="true">
               <div class="die-cube">
-                <div class="cube-face cube-front"><span class="cube-symbol">${item[0]}</span></div>
+                <div class="cube-face cube-front"><span class="cube-symbol">${item.emoji}</span></div>
                 <div class="cube-face cube-back">${makePips(6)}</div>
                 <div class="cube-face cube-right">${makePips(3)}</div>
                 <div class="cube-face cube-left">${makePips(4)}</div>
@@ -310,13 +408,13 @@
                 <div class="cube-face cube-bottom">${makePips(5)}</div>
               </div>
             </div>
-            <div class="die-word">${item[1]}</div>
+            <div class="die-word">${item.word}</div>
           </article>
         `).join('');
       }
 
       function makeStory() {
-        const words = rolled.slice(0, 3).map(item => item[1]);
+        const words = rolled.slice(0, 3).map(item => item.word);
         story = storyOpeners[Math.floor(Math.random() * storyOpeners.length)];
         story = story.replace(/\{(\d)\}/g, (_, position) => {
           const word = words[position] || 'something unknown';
@@ -326,9 +424,13 @@
       }
 
       function rollDice() {
-        const pool = packs[activePack];
-        const buckets = { character: [], object: [], place: [] };
-        shuffle(pool).forEach(item => buckets[getCategory(item[1])].push(item));
+        const pack = packs[activePack];
+        const buckets = {
+          character: shuffle(pack.characters),
+          object: shuffle(pack.objects),
+          place: shuffle(pack.places)
+        };
+        const pool = [...pack.characters, ...pack.objects, ...pack.places];
         rolled = Array.from({ length: count }, (_, index) => {
           const category = rollSequence[index % rollSequence.length];
           return buckets[category][Math.floor(index / rollSequence.length)] || buckets[category][0] || pool[index % pool.length];
@@ -342,7 +444,7 @@
       }
 
       function changeCount(delta) {
-    count = Math.max(3, Math.min(6, count + delta));
+        count = Math.max(3, Math.min(6, count + delta));
         countEl.textContent = count;
         rollDice();
       }
