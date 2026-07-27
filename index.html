@@ -345,16 +345,23 @@
 
       const categoryKeys = { character: 'characters', object: 'objects', place: 'places' };
       const makeItem = (item, category) => ({ emoji: item[0], word: item[1], category });
+      const uniqueByEmoji = items => [...new Map(items.map(item => [item.emoji, item])).values()];
       const packs = Object.fromEntries(Object.entries(seedPacks).map(([name, items]) => {
         const grouped = { character: [], object: [], place: [] };
         items.forEach(item => grouped[getSeedCategory(item[1])].push(makeItem(item, getSeedCategory(item[1]))));
         Object.entries(categoryKeys).forEach(([category, key]) => {
           additionalPacks[name][key].forEach(item => grouped[category].push(makeItem(item, category)));
         });
+        const usedEmojis = new Set();
+        const uniqueCategory = category => uniqueByEmoji(grouped[category]).filter(item => {
+          if (usedEmojis.has(item.emoji)) return false;
+          usedEmojis.add(item.emoji);
+          return true;
+        });
         return [name, {
-          characters: grouped.character,
-          objects: grouped.object,
-          places: grouped.place
+          characters: uniqueCategory('character'),
+          objects: uniqueCategory('object'),
+          places: uniqueCategory('place')
         }];
       }));
 
@@ -394,6 +401,33 @@
       const makePips = count => `<span class="cube-pips pips-${count}">${'<i></i>'.repeat(count)}</span>`;
       const categoryLabel = category => category.toUpperCase();
 
+      const permutationState = Object.fromEntries(Object.keys(packs).map(name => [name, {
+        character: { permutation: [], cursor: 0, lastEmoji: '' },
+        object: { permutation: [], cursor: 0, lastEmoji: '' },
+        place: { permutation: [], cursor: 0, lastEmoji: '' }
+      }]));
+
+      const makePermutation = (items, previousEmoji) => {
+        const permutation = shuffle(items);
+        if (permutation.length > 1 && permutation[0].emoji === previousEmoji) {
+          const swapIndex = permutation.findIndex(item => item.emoji !== previousEmoji);
+          [permutation[0], permutation[swapIndex]] = [permutation[swapIndex], permutation[0]];
+        }
+        return permutation;
+      };
+
+      function nextFromPermutation(packName, category) {
+        const state = permutationState[packName][category];
+        const list = packs[packName][categoryKeys[category]];
+        if (!state.permutation.length || state.cursor === state.permutation.length) {
+          state.permutation = makePermutation(list, state.lastEmoji);
+          state.cursor = 0;
+        }
+        const item = state.permutation[state.cursor++];
+        state.lastEmoji = item.emoji;
+        return item;
+      }
+
       function renderDice(animate = false) {
         grid.innerHTML = rolled.map((item, index) => `
           <article class="die die-${item.category} ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--cube-tilt:${index % 2 ? 2 : -2}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item.word}">
@@ -424,16 +458,9 @@
       }
 
       function rollDice() {
-        const pack = packs[activePack];
-        const buckets = {
-          character: shuffle(pack.characters),
-          object: shuffle(pack.objects),
-          place: shuffle(pack.places)
-        };
-        const pool = [...pack.characters, ...pack.objects, ...pack.places];
         rolled = Array.from({ length: count }, (_, index) => {
           const category = rollSequence[index % rollSequence.length];
-          return buckets[category][Math.floor(index / rollSequence.length)] || buckets[category][0] || pool[index % pool.length];
+          return nextFromPermutation(activePack, category);
         });
         countEl.textContent = count;
         grid.querySelectorAll('.die').forEach(die => die.classList.add('is-rolling'));
