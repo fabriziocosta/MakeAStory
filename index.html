@@ -103,7 +103,7 @@
     .die:hover { filter: saturate(1.08) brightness(1.08); transform: rotate(0deg) translateY(-4px); }
     .die.is-rolling { animation: tumble .28s ease-in-out infinite alternate; }
     .die.is-new { animation: die-land .68s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--delay, 0ms); }
-    .die-number { position: absolute; top: 10px; right: 10px; z-index: 1; display: grid; place-items: center; width: 28px; height: 20px; border: 1px solid rgba(255,255,255,.18); border-radius: 7px; color: rgba(255,255,255,.66); background: rgba(0,0,0,.15); font-size: 9px; font-weight: 800; letter-spacing: .08em; }
+    .die-number { position: absolute; top: 10px; right: 10px; z-index: 1; display: grid; place-items: center; min-width: 62px; height: 20px; padding: 0 6px; border: 1px solid rgba(255,255,255,.18); border-radius: 7px; color: rgba(255,255,255,.66); background: rgba(0,0,0,.15); font-size: 8px; font-weight: 800; letter-spacing: .07em; }
     .die-stage { position: relative; z-index: 1; display: grid; place-items: center; min-height: 125px; perspective: 560px; }
     .die-cube { --cube-size: 82px; position: relative; width: var(--cube-size); height: var(--cube-size); transform-style: preserve-3d; transform: rotateX(-18deg) rotateY(30deg) rotateZ(var(--cube-tilt, 0deg)); }
     .die.is-new .die-cube { animation: cube-roll .68s cubic-bezier(.18,.8,.25,1) both; animation-delay: var(--delay, 0ms); }
@@ -125,7 +125,7 @@
     .pips-5 i:nth-child(1) { grid-area: 1 / 1; } .pips-5 i:nth-child(2) { grid-area: 1 / 3; } .pips-5 i:nth-child(3) { grid-area: 2 / 2; } .pips-5 i:nth-child(4) { grid-area: 3 / 1; } .pips-5 i:nth-child(5) { grid-area: 3 / 3; }
     .pips-6 i:nth-child(1) { grid-area: 1 / 1; } .pips-6 i:nth-child(2) { grid-area: 2 / 1; } .pips-6 i:nth-child(3) { grid-area: 3 / 1; } .pips-6 i:nth-child(4) { grid-area: 1 / 3; } .pips-6 i:nth-child(5) { grid-area: 2 / 3; } .pips-6 i:nth-child(6) { grid-area: 3 / 3; }
     .die-word { position: relative; z-index: 1; color: #fff7f0; font-size: 13px; font-weight: 800; letter-spacing: .01em; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,.28); }
-    .die-action { --die-a: #c97c58; --die-b: #843c31; }
+    .die-object { --die-a: #c97c58; --die-b: #843c31; }
     .die-place { --die-a: #8178d2; --die-b: #4e438f; }
     .die-character { --die-a: #b3c866; --die-b: #65752f; }
     .die-world { --die-a: #5cabb0; --die-b: #276c77; }
@@ -305,15 +305,17 @@
       const categoryRules = [
         ['character', /bear|bee|black cat|butterfly|camel|cat|chick|climber|crab|detective|dinosaur|dolphin|dragon|duck|eagle|elephant|fairy|flamingo|fox|frog|hamster|horse|kitten|ladybird|lion|long-neck|mountaineer|octopus|otter|owl|parrot|penguin|puppy|rabbit|raven|scorpion|shark|silhouette|sloth|snake|spider|squid|turtle|unicorn|whale|wizard|wolf/],
         ['place', /airplane|ambulance|bridge|building|cabin|castle|city|camping|desert|forest|galaxy|glacier|hall|helicopter|home|hospital|house|island|mountain|motorboat|rain|rocket|school|ship|snowflake|space|subway|sun|temple|tent|train|tunnel|volcano|wave/],
-        ['action', /balloon|bell|bow|clapper|drum|flame|flashlight|guitar|hammer|kite|ladder|microphone|piano|roller coaster|saxophone|scissors|slide|sparkles|storm|swords|tornado|trumpet|violin/]
+        ['object', /balloon|bell|bow|clapper|drum|flame|flashlight|guitar|hammer|kite|ladder|microphone|piano|roller coaster|saxophone|scissors|slide|sparkles|storm|swords|tornado|trumpet|violin/]
       ];
-      const getCategory = word => (categoryRules.find(([, rule]) => rule.test(word)) || ['world'])[0];
+      const rollSequence = ['character', 'object', 'place'];
+      const getCategory = word => (categoryRules.find(([, rule]) => rule.test(word)) || ['object'])[0];
       const makePips = count => `<span class="cube-pips pips-${count}">${'<i></i>'.repeat(count)}</span>`;
+      const categoryLabel = category => category.toUpperCase();
 
       function renderDice(animate = false) {
         grid.innerHTML = rolled.map((item, index) => `
           <article class="die die-${getCategory(item[1])} ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--cube-tilt:${index % 2 ? 2 : -2}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item[1]}">
-            <div class="die-number">DIE ${String(index + 1).padStart(2, '0')}</div>
+            <div class="die-number">${categoryLabel(getCategory(item[1]))} ${String(index + 1).padStart(2, '0')}</div>
             <div class="die-stage" aria-hidden="true">
               <div class="die-cube">
                 <div class="cube-face cube-front"><span class="cube-symbol">${item[0]}</span></div>
@@ -341,7 +343,12 @@
 
       function rollDice() {
         const pool = packs[activePack];
-        rolled = shuffle(pool).slice(0, count);
+        const buckets = { character: [], object: [], place: [] };
+        shuffle(pool).forEach(item => buckets[getCategory(item[1])].push(item));
+        rolled = Array.from({ length: count }, (_, index) => {
+          const category = rollSequence[index % rollSequence.length];
+          return buckets[category][Math.floor(index / rollSequence.length)] || buckets[category][0] || pool[index % pool.length];
+        });
         countEl.textContent = count;
         grid.querySelectorAll('.die').forEach(die => die.classList.add('is-rolling'));
         setTimeout(() => {
