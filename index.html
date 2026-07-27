@@ -49,57 +49,61 @@
     .brand span:last-child { display: block; font-size: 16px; }
     .top-note { color: var(--muted); font-size: 13px; }
 
-    .hero { display: grid; grid-template-columns: 1.05fr .95fr; align-items: end; gap: 44px; padding: 52px 0 42px; }
+    .hero { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 52px 0 29px; }
     .eyebrow { display: flex; align-items: center; gap: 9px; color: var(--lime); font-size: 11px; letter-spacing: .17em; text-transform: uppercase; font-weight: 800; }
     .eyebrow i { display: block; width: 24px; height: 1px; background: var(--lime); }
     h1 { max-width: 600px; margin: 16px 0 17px; font-size: clamp(45px, 7vw, 82px); line-height: .95; letter-spacing: -.075em; font-weight: 760; }
-    .hero p { max-width: 480px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.65; }
-    .hero-aside { justify-self: end; max-width: 360px; color: var(--muted); font-size: 13px; }
+    .hero p { max-width: 600px; margin: 0; color: #b8b4c2; font-size: 17px; line-height: 1.72; }
+    .hero-aside { display: none; }
     .hero-aside strong { display: block; color: var(--ink); font-size: 15px; margin-bottom: 8px; }
     .hero-aside em { color: var(--orange); font-style: normal; }
 
-    .workbench { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 28px; background: rgba(24,24,39,.78); box-shadow: var(--shadow); }
-    .workbench::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,.06), transparent 34%); }
-    .controls { position: relative; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+    .workbench { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.14); border-radius: 28px; background: linear-gradient(145deg, rgba(41,39,60,.95), rgba(25,25,42,.96)); box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.07); }
+    .workbench::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 50% 25%, rgba(136,124,255,.12), transparent 44%), linear-gradient(115deg, rgba(255,255,255,.07), transparent 34%); }
+    .controls { position: relative; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid var(--line); background: rgba(10,10,17,.2); }
+    .control-group { display: flex; align-items: center; gap: 10px; padding: 5px 7px 5px 10px; border: 1px solid rgba(255,255,255,.09); border-radius: 13px; background: rgba(255,255,255,.035); }
     .control-label { color: var(--muted-2); font-size: 11px; letter-spacing: .13em; text-transform: uppercase; font-weight: 800; }
     .count-control { display: flex; align-items: center; gap: 10px; }
-    .stepper { display: flex; align-items: center; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 11px; background: rgba(0,0,0,.17); }
-    .stepper button { width: 28px; height: 28px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 19px; line-height: 1; }
-    .stepper button:hover { color: var(--ink); background: rgba(255,255,255,.08); }
+    .stepper { display: flex; align-items: center; gap: 4px; padding: 3px; border: 1px solid rgba(255,255,255,.13); border-radius: 11px; background: rgba(0,0,0,.24); }
+    .stepper button { width: 31px; height: 31px; border: 0; border-radius: 8px; background: transparent; color: #c7c3d3; font-size: 19px; line-height: 1; }
+    .stepper button:hover { color: var(--ink); background: rgba(217,245,123,.13); }
     .count-value { min-width: 27px; text-align: center; color: var(--ink); font-weight: 750; }
-    .packs { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-    .pack { border: 1px solid transparent; border-radius: 9px; padding: 7px 11px; background: transparent; color: var(--muted); font-size: 12px; }
+    .packs { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+    .pack { border: 1px solid transparent; border-radius: 9px; padding: 8px 13px; background: transparent; color: #b8b4c2; font-size: 12px; }
     .pack:hover { color: var(--ink); background: rgba(255,255,255,.06); }
     .pack[aria-pressed="true"] { border-color: rgba(217,245,123,.32); background: rgba(217,245,123,.12); color: var(--lime); }
     .roll-button { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; border: 0; border-radius: 11px; padding: 11px 16px; background: var(--lime); color: var(--lime-ink); font-weight: 800; box-shadow: 0 8px 20px rgba(217,245,123,.12); transition: transform .2s ease, box-shadow .2s ease; }
     .roll-button:hover { transform: translateY(-2px); box-shadow: 0 11px 25px rgba(217,245,123,.22); }
     .roll-button .die-icon { font-size: 17px; }
 
-    .tray { position: relative; min-height: 430px; padding: 34px 34px 42px; }
-    .tray-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 27px; }
-    .tray-heading h2 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+    .tray { position: relative; min-height: 430px; padding: 29px 34px 42px; background: radial-gradient(circle at 50% 42%, rgba(117,109,194,.11), transparent 52%); }
+    .tray-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 27px; }
+    .tray-heading h2 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.015em; }
+    .tray-heading strong { color: var(--ink); font-weight: 700; }
     .tray-heading span { color: var(--muted-2); font-size: 12px; }
     .dice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); justify-content: center; gap: 15px; align-items: stretch; }
-    .die { --die-a: #ff9e68; --die-b: #b84b34; position: relative; min-height: 151px; padding: 15px 14px 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.15); border-radius: 18px; background: linear-gradient(145deg, var(--die-a), var(--die-b)); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -14px 24px rgba(0,0,0,.12), 0 12px 20px rgba(0,0,0,.2); transform: rotate(var(--tilt, 0deg)); transition: transform .25s ease, filter .25s ease; }
+    .die { --die-a: #c97c58; --die-b: #843c31; position: relative; min-height: 151px; padding: 15px 14px 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 18px; background: linear-gradient(145deg, var(--die-a), var(--die-b)); box-shadow: inset 0 1px 0 rgba(255,255,255,.24), inset 0 -14px 24px rgba(0,0,0,.17), 0 16px 23px rgba(0,0,0,.3), 0 2px 0 rgba(255,255,255,.08); transform: rotate(var(--tilt, 0deg)); transition: transform .25s ease, filter .25s ease; }
     .die::before { content: ""; position: absolute; width: 70px; height: 70px; right: -28px; top: -30px; border-radius: 50%; background: rgba(255,255,255,.14); }
     .die::after { content: ""; position: absolute; width: 85px; height: 14px; bottom: 8px; left: 12px; border-radius: 50%; background: rgba(0,0,0,.11); filter: blur(8px); }
     .die:hover { filter: saturate(1.08) brightness(1.08); transform: rotate(0deg) translateY(-4px); }
     .die.is-rolling { animation: tumble .55s ease-in-out infinite alternate; }
     .die.is-new { animation: pop .45s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--delay, 0ms); }
-    .die-number { position: relative; z-index: 1; color: rgba(255,255,255,.72); font-size: 10px; font-weight: 800; letter-spacing: .14em; }
-    .die-face { position: relative; z-index: 1; display: grid; place-items: center; min-height: 77px; font-size: clamp(38px, 4vw, 52px); filter: drop-shadow(0 4px 3px rgba(0,0,0,.2)); }
-    .die-word { position: relative; z-index: 1; color: #fff7f0; font-size: 12px; font-weight: 800; letter-spacing: .02em; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,.25); }
-    .die:nth-child(3n+2) { --die-a: #9b91ff; --die-b: #5b4bb7; }
-    .die:nth-child(3n+3) { --die-a: #d9f57b; --die-b: #74903b; }
-    .die:nth-child(4n) { --die-a: #70d7cf; --die-b: #277b87; }
+    .die-number { position: absolute; top: 10px; right: 10px; z-index: 1; display: grid; place-items: center; width: 28px; height: 20px; border: 1px solid rgba(255,255,255,.18); border-radius: 7px; color: rgba(255,255,255,.66); background: rgba(0,0,0,.15); font-size: 9px; font-weight: 800; letter-spacing: .08em; }
+    .die-face { position: relative; z-index: 1; display: grid; place-items: center; min-height: 82px; font-size: clamp(44px, 4.5vw, 60px); filter: drop-shadow(0 6px 5px rgba(0,0,0,.28)); }
+    .die-word { position: relative; z-index: 1; color: #fff7f0; font-size: 13px; font-weight: 800; letter-spacing: .01em; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,.28); }
+    .die-action { --die-a: #c97c58; --die-b: #843c31; }
+    .die-place { --die-a: #8178d2; --die-b: #4e438f; }
+    .die-character { --die-a: #b3c866; --die-b: #65752f; }
+    .die-world { --die-a: #5cabb0; --die-b: #276c77; }
 
-    .story-panel { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items: center; padding: 25px 28px 28px; border-top: 1px solid var(--line); background: rgba(10,10,17,.2); }
+    .story-panel { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 30px; align-items: center; padding: 29px 28px 31px; border-top: 1px solid rgba(255,255,255,.12); background: radial-gradient(circle at 22% 30%, rgba(255,158,104,.12), transparent 38%), rgba(13,13,21,.48); }
+    .story-panel::before { content: "“"; position: absolute; top: 12px; left: 25px; color: rgba(255,158,104,.21); font-family: Georgia, serif; font-size: 92px; line-height: 1; pointer-events: none; }
     .story-copy { min-width: 0; }
-    .story-kicker { display: flex; justify-content: space-between; align-items: center; color: var(--muted-2); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; font-weight: 800; }
+    .story-kicker { display: flex; justify-content: space-between; align-items: center; color: #9d98ab; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; font-weight: 800; }
     .spark { color: var(--orange); font-size: 16px; }
-    .story-copy h2 { margin: 9px 0 10px; font-size: 20px; letter-spacing: -.03em; }
-    .story-text { margin: 0; color: #dedbe6; font-size: 17px; line-height: 1.6; }
-    .story-text .highlight { color: var(--lime); font-weight: 750; }
+    .story-copy h2 { position: relative; margin: 9px 0 10px; font-size: 22px; letter-spacing: -.035em; }
+    .story-text { position: relative; margin: 0; color: #ede8df; font-size: 20px; line-height: 1.55; }
+    .story-text .highlight { color: var(--lime); font-weight: 750; text-decoration: underline; text-decoration-color: rgba(217,245,123,.35); text-decoration-thickness: 2px; text-underline-offset: 4px; }
     .story-actions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
     .secondary-button { border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; background: rgba(255,255,255,.04); color: var(--ink); font-size: 12px; font-weight: 700; }
     .secondary-button:hover { border-color: rgba(217,245,123,.4); background: rgba(217,245,123,.1); color: var(--lime); }
@@ -135,12 +139,11 @@
         <h1 id="page-title">Roll into<br><em style="color:var(--lime);font-style:normal">a story.</em></h1>
         <p>Throw a handful of picture dice. Then connect the unexpected dots into something only you could write.</p>
       </div>
-      <div class="hero-aside"><strong>There are no wrong rolls.</strong> A crown can be a secret, a <em>moon</em> can be a doorway, and a tiny key might unlock the whole plot.</div>
     </section>
 
     <section class="workbench" aria-label="Story dice generator">
       <div class="controls" aria-label="Dice controls">
-        <div class="count-control">
+        <div class="control-group count-control">
           <span class="control-label">Dice</span>
           <div class="stepper" role="group" aria-label="Number of dice">
             <button type="button" id="minus" aria-label="Use fewer dice">−</button>
@@ -148,7 +151,7 @@
             <button type="button" id="plus" aria-label="Use more dice">+</button>
           </div>
         </div>
-        <div class="packs" role="group" aria-label="Choose an emoji pack">
+        <div class="control-group packs" role="group" aria-label="Choose an emoji pack">
           <span class="control-label">Mood</span>
           <button class="pack" type="button" data-pack="adventure" aria-pressed="true">Adventure</button>
           <button class="pack" type="button" data-pack="whimsy" aria-pressed="false">Whimsy</button>
@@ -158,14 +161,14 @@
       </div>
 
       <div class="tray">
-        <div class="tray-heading"><h2>Your story ingredients</h2><span id="roll-note">Roll to rearrange the universe</span></div>
+        <div class="tray-heading"><h2>Your story ingredients</h2><span id="roll-note"><strong>There are no wrong rolls.</strong> Roll to rearrange the universe</span></div>
         <div class="dice-grid" id="dice-grid" aria-live="polite" aria-label="Rolled story ingredients"></div>
       </div>
 
       <div class="story-panel">
         <div class="story-copy">
-          <div class="story-kicker"><span>One possible beginning</span><span class="spark" aria-hidden="true">✦</span></div>
-          <h2>What happens next?</h2>
+          <div class="story-kicker"><span>Your story spark</span><span class="spark" aria-hidden="true">✦</span></div>
+          <h2>Your story starts here</h2>
           <p class="story-text" id="story-text"></p>
         </div>
         <div class="story-actions">
@@ -227,7 +230,6 @@
         mystery: [
           ['🕵️', 'detective'], ['🔍', 'clue'], ['🩸', 'red mark'], ['🗝️', 'key'], ['🕰️', 'clock'], ['🕸️', 'web'],
           ['👁️', 'eye'], ['📜', 'letter'], ['🚪', 'door'], ['🌫️', 'fog'], ['🎭', 'mask'], ['🐦‍⬛', 'raven'],
-          ['🧪', 'potion'], ['📸', 'photograph'], ['🧤', 'glove'], ['💎', 'gem'], ['🕯️', 'candle'], ['🗃️', 'file'],
           ['🧥', 'coat'], ['🧢', 'cap'], ['👓', 'glasses'], ['🔦', 'flashlight'], ['🧭', 'compass'], ['🗺️', 'map'],
           ['📌', 'pin'], ['📍', 'marker'], ['✉️', 'envelope'], ['📦', 'package'], ['🎁', 'box'], ['📚', 'books'],
           ['📖', 'book'], ['🗞️', 'newspaper'], ['📰', 'news'], ['✒️', 'ink pen'], ['🖋️', 'pen'], ['✍️', 'writing'],
@@ -263,12 +265,17 @@
       let rolled = [];
       let story = '';
 
-      const randomFrom = (items) => items[Math.floor(Math.random() * items.length)];
       const shuffle = (items) => [...items].sort(() => Math.random() - .5);
+      const categoryRules = [
+        ['character', /bear|bee|black cat|butterfly|camel|cat|chick|climber|crab|detective|dinosaur|dolphin|dragon|duck|eagle|elephant|fairy|flamingo|fox|frog|hamster|horse|kitten|ladybird|lion|long-neck|mountaineer|octopus|otter|owl|parrot|penguin|puppy|rabbit|raven|scorpion|shark|silhouette|sloth|snake|spider|squid|turtle|unicorn|whale|wizard|wolf/],
+        ['place', /airplane|ambulance|bridge|building|cabin|castle|city|camping|desert|forest|galaxy|glacier|hall|helicopter|home|hospital|house|island|mountain|motorboat|rain|rocket|school|ship|snowflake|space|subway|sun|temple|tent|train|tunnel|volcano|wave/],
+        ['action', /balloon|bell|bow|clapper|drum|flame|flashlight|guitar|hammer|kite|ladder|microphone|piano|roller coaster|saxophone|scissors|slide|sparkles|storm|swords|tornado|trumpet|violin/]
+      ];
+      const getCategory = word => (categoryRules.find(([, rule]) => rule.test(word)) || ['world'])[0];
 
       function renderDice(animate = false) {
         grid.innerHTML = rolled.map((item, index) => `
-          <article class="die ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item[1]}">
+          <article class="die die-${getCategory(item[1])} ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item[1]}">
             <div class="die-number">DIE ${String(index + 1).padStart(2, '0')}</div>
             <div class="die-face" aria-hidden="true">${item[0]}</div>
             <div class="die-word">${item[1]}</div>
@@ -279,7 +286,10 @@
       function makeStory() {
         const words = rolled.slice(0, 3).map(item => item[1]);
         story = storyOpeners[Math.floor(Math.random() * storyOpeners.length)];
-        story = story.replace(/\{(\d)\}/g, (_, position) => `<span class="highlight">${words[position] || 'something unknown'}</span>`);
+        story = story.replace(/\{(\d)\}/g, (_, position) => {
+          const word = words[position] || 'something unknown';
+          return Number(position) < 2 ? `<span class="highlight">${word}</span>` : word;
+        });
         storyText.innerHTML = story;
       }
 
