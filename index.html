@@ -92,15 +92,23 @@
 
     .tray { position: relative; order: 2; min-height: 0; padding: 30px 34px 48px; background: radial-gradient(circle at 50% 42%, rgba(117,109,194,.11), transparent 52%); }
     .dice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); justify-content: center; gap: 15px; align-items: stretch; }
-    .die { --die-a: #c97c58; --die-b: #843c31; position: relative; min-height: 204px; padding: 14px 14px 16px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(0,0,0,.12)); box-shadow: inset 0 1px 0 rgba(255,255,255,.11), 0 16px 23px rgba(0,0,0,.3), 0 2px 0 rgba(255,255,255,.08); transform: rotate(var(--tilt, 0deg)); transition: transform .25s ease, filter .25s ease; }
+    .die { --die-a: #c97c58; --die-b: #843c31; position: relative; min-height: 204px; padding: 14px 14px 16px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(0,0,0,.12)); box-shadow: inset 0 1px 0 rgba(255,255,255,.11), 0 16px 23px rgba(0,0,0,.3), 0 2px 0 rgba(255,255,255,.08); cursor: pointer; user-select: none; transform: rotate(var(--tilt, 0deg)); transition: transform .25s ease, filter .25s ease, border-color .25s ease, box-shadow .25s ease; }
     .die::before { content: ""; position: absolute; width: 70px; height: 70px; right: -28px; top: -30px; border-radius: 50%; background: rgba(255,255,255,.14); }
     .die::after { content: ""; position: absolute; width: 92px; height: 17px; bottom: 37px; left: 50%; border-radius: 50%; background: rgba(0,0,0,.35); filter: blur(10px); transform: translateX(-50%); }
     .die:hover { filter: saturate(1.08) brightness(1.08); transform: rotate(0deg) translateY(-4px); }
+    .die:focus-visible { position: relative; z-index: 3; }
+    .die.is-locked { border-color: rgba(217,245,123,.62); background: linear-gradient(145deg, rgba(217,245,123,.12), rgba(0,0,0,.14)); box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 16px 23px rgba(0,0,0,.3), 0 0 0 3px rgba(217,245,123,.1); transform: rotate(0deg); }
+    .die.is-locked:hover { transform: translateY(-4px); }
     .die.is-rolling { animation: tumble .28s ease-in-out infinite alternate; }
     .die.is-new { animation: die-land .68s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--delay, 0ms); }
     .die-type { position: absolute; top: 10px; right: 10px; z-index: 1; display: grid; place-items: center; min-width: 76px; height: 20px; padding: 0 7px; border: 1px solid rgba(255,255,255,.18); border-radius: 7px; color: rgba(255,255,255,.66); background: rgba(0,0,0,.15); font-size: 8px; font-weight: 800; letter-spacing: .07em; }
+    .die-lock { position: absolute; top: 10px; left: 10px; z-index: 2; display: grid; place-items: center; width: 20px; height: 20px; border: 1px solid rgba(217,245,123,.42); border-radius: 7px; background: rgba(0,0,0,.24); font-size: 11px; opacity: 0; transition: opacity .2s ease; }
+    .die:hover .die-lock, .die.is-locked .die-lock { opacity: 1; }
     .die-stage { position: relative; z-index: 1; display: grid; place-items: center; min-height: 130px; padding-top: 24px; perspective: 560px; }
     .die-cube { --cube-size: 82px; position: relative; width: var(--cube-size); height: var(--cube-size); border-radius: 14px; background: linear-gradient(145deg, var(--die-a), var(--die-b)); transform-style: preserve-3d; transform: rotateX(-18deg) rotateY(30deg) rotateZ(var(--cube-tilt, 0deg)); }
+    .die.is-locked .die-cube { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    .die.is-locked .cube-face:not(.cube-front) { visibility: hidden; }
+    .die.is-locked .cube-front { transform: translateZ(0); border-radius: 12px; }
     .die.is-new .die-cube { animation: cube-roll .68s cubic-bezier(.18,.8,.25,1) both; animation-delay: var(--delay, 0ms); }
     .die.is-rolling .die-cube { animation: cube-shake .28s ease-in-out infinite alternate; }
     .cube-face { position: absolute; z-index: 1; inset: 0; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(255,255,255,.28); border-radius: 10px; background: linear-gradient(145deg, var(--die-a), var(--die-b)); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset -7px -8px 14px rgba(0,0,0,.2); backface-visibility: hidden; }
@@ -942,12 +950,13 @@
         }
         const item = state.permutation[state.cursor++];
         state.lastEmoji = item.emoji;
-        return { ...item, category };
+        return { ...item, category, locked: false };
       }
 
-      function renderDice(animate = false) {
+      function renderDice(animate = false, changedIndices = new Set()) {
         grid.innerHTML = rolled.map((item, index) => `
-          <article class="die die-${item.category} ${animate ? 'is-new' : ''}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--cube-tilt:${index % 2 ? 2 : -2}deg;--delay:${index * 45}ms" aria-label="Die ${index + 1}: ${item.word}">
+          <article class="die die-${item.category} ${item.locked ? 'is-locked' : ''} ${animate && changedIndices.has(index) ? 'is-new' : ''}" data-index="${index}" style="--tilt:${index % 2 ? 1.5 : -1.5}deg;--cube-tilt:${index % 2 ? 2 : -2}deg;--delay:${index * 45}ms" role="button" tabindex="0" aria-pressed="${item.locked}" aria-label="Die ${index + 1}: ${item.word}. ${item.locked ? 'Locked. Click to unlock.' : 'Unlocked. Click to lock.'}">
+            <span class="die-lock" aria-hidden="true">🔒</span>
             <div class="die-type">${categoryLabel(item.category)}</div>
             <div class="die-stage" aria-hidden="true">
               <div class="die-cube">
@@ -985,16 +994,29 @@
 
       function rollDice() {
         stopSpeaking();
+        const previousRolled = rolled;
+        const changedIndices = new Set();
         rolled = Array.from({ length: count }, (_, index) => {
+          const previousDie = previousRolled[index];
+          if (previousDie?.locked) return previousDie;
           const category = rollSequence[index % rollSequence.length];
+          changedIndices.add(index);
           return nextFromPermutation(activePack, category);
         });
         countEl.textContent = count;
-        grid.querySelectorAll('.die').forEach(die => die.classList.add('is-rolling'));
+        grid.querySelectorAll('.die:not(.is-locked)').forEach(die => die.classList.add('is-rolling'));
         setTimeout(() => {
-          renderDice(true);
+          renderDice(true, changedIndices);
           makeStory();
         }, 300);
+      }
+
+      function toggleLock(die) {
+        const index = Number(die.dataset.index);
+        if (!rolled[index]) return;
+        rolled[index].locked = !rolled[index].locked;
+        renderDice();
+        makeStory();
       }
 
       function changeCount(delta) {
@@ -1007,6 +1029,17 @@
       document.getElementById('plus').addEventListener('click', () => changeCount(1));
       speakButton.addEventListener('click', speakStory);
       document.getElementById('roll').addEventListener('click', rollDice);
+      grid.addEventListener('click', event => {
+        const die = event.target.closest('.die');
+        if (die) toggleLock(die);
+      });
+      grid.addEventListener('keydown', event => {
+        const die = event.target.closest('.die');
+        if (die && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          toggleLock(die);
+        }
+      });
       if (!supportsSpeech) speakButton.disabled = true;
       document.querySelectorAll('.pack').forEach(button => {
         button.addEventListener('click', () => {
