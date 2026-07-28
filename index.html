@@ -80,9 +80,15 @@
     .pack { border: 1px solid transparent; border-radius: 9px; padding: 8px 13px; background: transparent; color: #b8b4c2; font-size: 12px; }
     .pack:hover { color: var(--ink); background: rgba(255,255,255,.06); }
     .pack[aria-pressed="true"] { border-color: rgba(217,245,123,.32); background: rgba(217,245,123,.12); color: var(--lime); }
-    .roll-button { display: inline-flex; align-items: center; gap: 9px; margin-left: auto; border: 0; border-radius: 11px; padding: 8px 14px 8px 11px; background: var(--lime); color: var(--lime-ink); font-weight: 800; box-shadow: 0 8px 20px rgba(217,245,123,.12); transition: transform .2s ease, box-shadow .2s ease; }
+    .action-buttons { display: flex; align-items: center; gap: 9px; margin-left: auto; }
+    .speak-button, .roll-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 0; border-radius: 11px; padding: 8px 14px; font-weight: 800; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+    .speak-button { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.07); color: var(--ink); }
+    .speak-button:hover { transform: translateY(-2px); background: rgba(255,255,255,.12); box-shadow: 0 9px 22px rgba(0,0,0,.18); }
+    .speak-button[aria-pressed="true"] { border-color: rgba(217,245,123,.35); background: rgba(217,245,123,.14); color: var(--lime); }
+    .speak-button:disabled { cursor: not-allowed; opacity: .5; }
     .roll-button:hover { transform: translateY(-2px); box-shadow: 0 11px 25px rgba(217,245,123,.22); }
     .roll-button .die-icon { font-size: 28px; line-height: .9; }
+    .action-buttons .roll-button { background: var(--lime); color: var(--lime-ink); box-shadow: 0 8px 20px rgba(217,245,123,.12); }
 
     .tray { position: relative; order: 2; min-height: 0; padding: 30px 34px 48px; background: radial-gradient(circle at 50% 42%, rgba(117,109,194,.11), transparent 52%); }
     .dice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); justify-content: center; gap: 15px; align-items: stretch; }
@@ -140,7 +146,7 @@
     @keyframes cube-roll { 0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(.7); } 48% { transform: rotateX(390deg) rotateY(520deg) rotateZ(25deg) scale(1.08); } 78% { transform: rotateX(710deg) rotateY(660deg) rotateZ(-8deg) scale(1.02); } 100% { transform: rotateX(-18deg) rotateY(30deg) rotateZ(var(--cube-tilt, 0deg)) scale(1); } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
     @media (max-width: 900px) { .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); } .hero { grid-template-columns: 1fr; gap: 24px; } .hero-aside { justify-self: start; } }
-    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .roll-button { margin-left: 0; width: 100%; justify-content: center; } .tray { min-height: 0; padding: 24px 16px 34px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 196px; } .die-cube { --cube-size: 74px; } .story-panel { grid-template-columns: 1fr; gap: 0; padding: 26px 16px 30px; } .story-copy { padding-left: 50px; } .story-panel::before { left: 19px; top: 17px; font-size: 94px; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
+    @media (max-width: 620px) { .shell { width: min(100% - 28px, 1180px); } .hero { padding: 34px 0 30px; } h1 { font-size: clamp(47px, 15vw, 70px); } .hero p { font-size: 15px; } .controls { gap: 16px; padding: 16px; } .action-buttons { margin-left: 0; width: 100%; } .action-buttons button { flex: 1; } .tray { min-height: 0; padding: 24px 16px 34px; } .dice-grid { grid-template-columns: repeat(auto-fit, minmax(105px, 145px)); gap: 11px; } .die { min-height: 196px; } .die-cube { --cube-size: 74px; } .story-panel { grid-template-columns: 1fr; gap: 0; padding: 26px 16px 30px; } .story-copy { padding-left: 50px; } .story-panel::before { left: 19px; top: 17px; font-size: 94px; } .below { display: block; padding: 22px 2px 35px; } .shortcut { margin-top: 10px; text-align: left; } }
   </style>
 </head>
 <body>
@@ -169,7 +175,10 @@
           <button class="pack" type="button" data-pack="whimsy" aria-pressed="false">Whimsy</button>
           <button class="pack" type="button" data-pack="mystery" aria-pressed="false">Mystery</button>
         </div>
-        <button class="roll-button" type="button" id="roll"><span class="die-icon" aria-hidden="true">⚄</span> Roll</button>
+        <div class="action-buttons">
+          <button class="speak-button" type="button" id="speak" aria-label="Read the story aloud" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="speak-label">Speak</span></button>
+          <button class="roll-button" type="button" id="roll"><span class="die-icon" aria-hidden="true">⚄</span> Roll</button>
+        </div>
       </div>
 
       <div class="tray">
@@ -860,10 +869,49 @@
       const countEl = document.getElementById('count');
       const grid = document.getElementById('dice-grid');
       const storyText = document.getElementById('story-text');
+      const speakButton = document.getElementById('speak');
       let count = 6;
       let activePack = 'adventure';
       let rolled = [];
       let story = '';
+      let isSpeaking = false;
+
+      const supportsSpeech = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+
+      function updateSpeakButton() {
+        speakButton.setAttribute('aria-pressed', String(isSpeaking));
+        speakButton.setAttribute('aria-label', isSpeaking ? 'Stop reading the story' : 'Read the story aloud');
+        speakButton.querySelector('.speak-label').textContent = isSpeaking ? 'Stop' : 'Speak';
+        speakButton.querySelector('[aria-hidden="true"]').textContent = isSpeaking ? '⏹' : '🔊';
+      }
+
+      function stopSpeaking() {
+        if (supportsSpeech) window.speechSynthesis.cancel();
+        isSpeaking = false;
+        updateSpeakButton();
+      }
+
+      function speakStory() {
+        if (!supportsSpeech) return;
+        if (isSpeaking) {
+          stopSpeaking();
+          return;
+        }
+
+        const text = storyText.textContent.trim();
+        if (!text) return;
+
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.95;
+        utterance.onstart = () => {
+          isSpeaking = true;
+          updateSpeakButton();
+        };
+        utterance.onend = stopSpeaking;
+        utterance.onerror = stopSpeaking;
+        window.speechSynthesis.speak(utterance);
+      }
 
       const shuffle = (items) => [...items].sort(() => Math.random() - .5);
       const rollSequence = ['character', 'object', 'place'];
@@ -936,6 +984,7 @@
       }
 
       function rollDice() {
+        stopSpeaking();
         rolled = Array.from({ length: count }, (_, index) => {
           const category = rollSequence[index % rollSequence.length];
           return nextFromPermutation(activePack, category);
@@ -956,7 +1005,9 @@
 
       document.getElementById('minus').addEventListener('click', () => changeCount(-1));
       document.getElementById('plus').addEventListener('click', () => changeCount(1));
+      speakButton.addEventListener('click', speakStory);
       document.getElementById('roll').addEventListener('click', rollDice);
+      if (!supportsSpeech) speakButton.disabled = true;
       document.querySelectorAll('.pack').forEach(button => {
         button.addEventListener('click', () => {
           activePack = button.dataset.pack;
